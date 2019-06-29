@@ -3,13 +3,15 @@ import { Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as shpLstActions from '../shopping-list/store/shopping-list.action';
 
 @Injectable({providedIn: 'root'})
 export class RecipesService {
 
     recipeChanged = new Subject<Recipe[]>();
 
-    constructor(private slService: ShoppingListService) {}
+    constructor(private slService: ShoppingListService, private store: Store<{ shpList: { ingredients: Ingredient[] } }>) {}
 
     // private recipes: Recipe[] = [ new Recipe('Pan-Seared Pork Chops with Roasted Fennel and Tomatoes',
     // 'Juicy Pan-Seared Pork Chops with Roasted Fennel and Tomatoes',
@@ -33,7 +35,8 @@ export class RecipesService {
         return this.recipes.slice()[index];
     }
     addIngredientsToRecipe(ingredients: Ingredient[]) {
-      this.slService.pushIngredients(ingredients);
+      this.store.dispatch(new shpLstActions.AddIngredients(ingredients));
+    //  this.slService.pushIngredients(ingredients);
     }
 
     addNewRecipe(recipe: Recipe) {
