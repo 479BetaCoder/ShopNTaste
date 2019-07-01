@@ -3,6 +3,9 @@ import { DataStorageService } from '../shared/data-storage.service';
 import { RecipesService } from '../recipe-list/recipes.service';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
+import { AppState } from '../appStore/app.reducer';
+import { Store } from '@ngrx/store';
+import { take, map } from 'rxjs/operators';
 
 
 @Component({
@@ -16,10 +19,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
 
   collapsed = true;
-  constructor(private dataServ: DataStorageService, private authServ: AuthService) { }
+  constructor(private dataServ: DataStorageService, private authServ: AuthService, private store: Store<AppState>) { }
 
   ngOnInit() {
-   this.userSub = this.authServ.user.subscribe(user => {
+   this.userSub = this.store.select('authState').pipe(map(authState => authState.user)).subscribe(user => {
      this.isAuthenticated = !!user;
      });
   }

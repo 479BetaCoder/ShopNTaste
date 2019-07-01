@@ -1,17 +1,17 @@
 import { Recipe } from './recipe.model';
 import { Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
-import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as shpLstActions from '../shopping-list/store/shopping-list.action';
+import * as fromAppStore from '../appStore/app.reducer';
 
 @Injectable({providedIn: 'root'})
 export class RecipesService {
 
     recipeChanged = new Subject<Recipe[]>();
 
-    constructor(private slService: ShoppingListService, private store: Store<{ shpList: { ingredients: Ingredient[] } }>) {}
+    constructor(private store: Store<fromAppStore.AppState>) {}
 
     // private recipes: Recipe[] = [ new Recipe('Pan-Seared Pork Chops with Roasted Fennel and Tomatoes',
     // 'Juicy Pan-Seared Pork Chops with Roasted Fennel and Tomatoes',

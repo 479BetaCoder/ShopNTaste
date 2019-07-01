@@ -19,14 +19,18 @@ export class DataStorageService {
     fetchRecipes() {
         return this.http.get<Recipe[]>('https://shopntaste.firebaseio.com/recipes.json')
             .pipe(map(recipes => {
-                return recipes.map(recipe => {
-                    return {
-                        ...recipe,
-                        ingredients: recipe.ingredients ? recipe.ingredients : []
-                    };
-                });
+                if (recipes != null) {
+                    return recipes.map(recipe => {
+                        return {
+                            ...recipe,
+                            ingredients: recipe.ingredients ? recipe.ingredients : []
+                        };
+                    });
+                }
             }), tap(recipes => {
-                this.recServ.setRecipes(recipes);
+                if (recipes != null) {
+                    this.recServ.setRecipes(recipes);
+                }
             }));
     }
 
